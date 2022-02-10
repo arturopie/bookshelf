@@ -2,7 +2,9 @@
 
 ## 📝 Your Notes
 
-Elaborate on your learnings here in `INSTRUCTIONS.md`
+Questions:
+
+* How to make hot reload keep the hook states on each reload. For example, the dialog autocloses on each hot reload
 
 ## Background
 
