@@ -4,6 +4,14 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* styled-components vs emotion.sh?
+* Does styled-components has something like the css prop?
+  * Apparently version 4 supports it.
+* Rubymine's support for CSS in JS is great?
+* If you start a new app, wouldn't you start with one of the many public Design Systems (if your company does not have one)
+* The classname generation seems to be based on the content of the styles
+* Why would you use '@emotion/styled' over '@emotion/styled/macro'?
+
 ## Background
 
 There are many ways to style React applications, each approach comes with its
