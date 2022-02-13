@@ -4,6 +4,15 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* We always make http requests in event handlers, but:
+  > In general I
+  recommend to do all your side effects inside the `useEffect`. This is because in
+  the event handler you don't have any possibility to prevent race conditions, or
+  to implement any cancellation mechanism.
+
+  Could this be the reason we are getting undefined data errors in Sentry?
+* Why using `then` instead of `async/wait`?
+
 ## Background
 
 Our app wouldn't be very interesting without the ability to request data from a
