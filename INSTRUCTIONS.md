@@ -4,6 +4,8 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* In the HTTP request exercises, he recommended not doing request in event handlers, always in useEffect, then why he did it in an event handler here: https://github.com/arturopie/bookshelf/blob/f8b17bef45528d7142d3ade68024678f35611501/src/unauthenticated-app.js#L16
+
 ## Background
 
 ### Authenticated HTTP requests
