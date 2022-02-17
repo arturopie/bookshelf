@@ -4,6 +4,9 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* We should make more use of URLs (e.g. for filtering values in list pages). If we do this for the POLI page, then we don't need that weird provider at the top of the tree.
+* We don't consistently use <Link />, so our app is not very SPA
+
 ## Background
 
 The URL is arguably one of the best features of the web. The ability for one
