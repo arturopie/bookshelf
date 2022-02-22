@@ -15,6 +15,8 @@ import Tooltip from '@reach/tooltip'
 import {useAsync} from 'utils/hooks'
 import * as colors from 'styles/colors'
 import {CircleButton, Spinner} from './lib'
+import {queryCache, useMutation, useQuery} from 'react-query'
+import {client} from '../utils/api-client.exercise'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -48,29 +50,38 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
 }
 
 function StatusButtons({user, book}) {
-  // 🐨 call useQuery here to get the listItem (if it exists)
-  // queryKey should be 'list-items'
-  // queryFn should call the list-items endpoint
+  const {data: listItems, isSuccess} = useQuery('list-items', endpoint => {
+    return client(endpoint, {token: user.token}).then(data => data.listItems)
+  })
 
-  // 🐨 search through the listItems you got from react-query and find the
-  // one with the right bookId.
-  const listItem = null
+  const listItem = isSuccess ? listItems.find(i => i.bookId === book.id) : null
 
-  // 💰 for all the mutations below, if you want to get the list-items cache
-  // updated after this query finishes the use the `onSettled` config option
-  // to queryCache.invalidateQueries('list-items')
+  const invalidateListItemsQuery = {
+    onSettled: () => queryCache.invalidateQueries('list-items'),
+  }
+  const [update] = useMutation(
+    data =>
+      client(`list-items/${listItem.id}`, {
+        token: user.token,
+        method: 'PUT',
+        data,
+      }),
+    invalidateListItemsQuery,
+  )
 
-  // 🐨 call useMutation here and assign the mutate function to "update"
-  // the mutate function should call the list-items/:listItemId endpoint with a PUT
-  //   and the updates as data. The mutate function will be called with the updates
-  //   you can pass as data.
+  const [remove] = useMutation(
+    () =>
+      client(`list-items/${listItem.id}`, {
+        token: user.token,
+        method: 'DELETE',
+      }),
+    invalidateListItemsQuery,
+  )
 
-  // 🐨 call useMutation here and assign the mutate function to "remove"
-  // the mutate function should call the list-items/:listItemId endpoint with a DELETE
-
-  // 🐨 call useMutation here and assign the mutate function to "create"
-  // the mutate function should call the list-items endpoint with a POST
-  // and the bookId the listItem is being created for.
+  const [create] = useMutation(
+    () => client('list-items', {data: {bookId: book.id}, token: user.token}),
+    invalidateListItemsQuery,
+  )
 
   return (
     <React.Fragment>
@@ -79,18 +90,14 @@ function StatusButtons({user, book}) {
           <TooltipButton
             label="Unmark as read"
             highlight={colors.yellow}
-            // 🐨 add an onClick here that calls update with the data we want to update
-            // 💰 to mark a list item as unread, set the finishDate to null
-            // {id: listItem.id, finishDate: null}
+            onClick={() => update({id: listItem.id, finishDate: null})}
             icon={<FaBook />}
           />
         ) : (
           <TooltipButton
             label="Mark as read"
             highlight={colors.green}
-            // 🐨 add an onClick here that calls update with the data we want to update
-            // 💰 to mark a list item as read, set the finishDate
-            // {id: listItem.id, finishDate: Date.now()}
+            onClick={() => update({id: listItem.id, finishDate: Date.now()})}
             icon={<FaCheckCircle />}
           />
         )
@@ -99,14 +106,14 @@ function StatusButtons({user, book}) {
         <TooltipButton
           label="Remove from list"
           highlight={colors.danger}
-          // 🐨 add an onClick here that calls remove
+          onClick={remove}
           icon={<FaMinusCircle />}
         />
       ) : (
         <TooltipButton
           label="Add to list"
           highlight={colors.indigo}
-          // 🐨 add an onClick here that calls create
+          onClick={create}
           icon={<FaPlusCircle />}
         />
       )}

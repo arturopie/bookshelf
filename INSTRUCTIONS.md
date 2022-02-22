@@ -16,6 +16,17 @@
 ## 📝 Your Notes
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
+* Prop drilling data vs caching. What's worst?
+  * Issues with caching: Forgetting to invalidate cache? Not using the same key? These are issues very easy to miss.
+* Now I understand why Apollo caches by default.
+  * It wants us to use the same query everywhere instead of prop drilling
+  * Let's think about how we could implement the POLI list page
+* React Query has similar API/features to Apollo.
+* Why React.useMemo with debounceFn (in book.exercise.js)
+* React Query seems to be the library we can use to migrate off redux
+* This is the reason why Apollo cashes by default?
+* It seems 'onSettled' runs before next render, right?
+* How to deal with pagination?
 
 ## Background
 

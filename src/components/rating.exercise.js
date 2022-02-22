@@ -6,6 +6,8 @@ import * as React from 'react'
 // 🐨 you'll also need the client from utils/api-client
 import {FaStar} from 'react-icons/fa'
 import * as colors from 'styles/colors'
+import {queryCache, useMutation} from 'react-query'
+import {client} from '../utils/api-client.exercise'
 
 const visuallyHiddenCSS = {
   border: '0',
@@ -20,13 +22,18 @@ const visuallyHiddenCSS = {
 
 function Rating({listItem, user}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  // 🐨 call useMutation here and call the function "update"
-  // the mutate function should call the list-items/:listItemId endpoint with a PUT
-  //   and the updates as data. The mutate function will be called with the updates
-  //   you can pass as data.
-  // 💰 if you want to get the list-items cache updated after this query finishes
-  // the use the `onSettled` config option to queryCache.invalidateQueries('list-items')
-  const update = () => {}
+  const invalidateListItemsQuery = {
+    onSettled: () => queryCache.invalidateQueries('list-items'),
+  }
+  const [update] = useMutation(
+    data =>
+      client(`list-items/${listItem.id}`, {
+        token: user.token,
+        method: 'PUT',
+        data,
+      }),
+    invalidateListItemsQuery,
+  )
 
   React.useEffect(() => {
     function handleKeyDown(event) {
