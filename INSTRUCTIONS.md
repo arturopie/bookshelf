@@ -16,17 +16,27 @@
 ## 📝 Your Notes
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
-* Prop drilling data vs caching. What's worst?
-  * Issues with caching: Forgetting to invalidate cache? Not using the same key? These are issues very easy to miss.
-* Now I understand why Apollo caches by default.
+* Biggest realization: now I understand why Apollo caches by default.
   * It wants us to use the same query everywhere instead of prop drilling
+  * It improves re-usability and maintainability of components
   * Let's think about how we could implement the POLI list page
+  * Drawback: Prop drilling data/reusability vs caching. What's worst?
+    * Issues with caching: Forgetting to invalidate cache? Not using the same key? These are issues very easy to miss. Example: Clear cache on user logout or a mutation
+    * How to test for proper use of cache? Specially for performance issues?
+    * A countermeasure is to use custom hooks for all usages of useQuery?
 * React Query has similar API/features to Apollo.
 * Why React.useMemo with debounceFn (in book.exercise.js)
 * React Query seems to be the library we can use to migrate off redux
 * This is the reason why Apollo cashes by default?
 * It seems 'onSettled' runs before next render, right?
 * How to deal with pagination?
+
+### Notes for After break 1
+* Is apollo dev tools as good? Maybe we should use it
+* Why the discrepancy between what useBook and useBookSearch return?
+  * Why not returning isSuccess, isLoading, etc?
+* Do we have duplication in ECO when using useQuery? Do you only extract when there is duplication?
+  * A benefit of extracting is making sure the keys match, but Apollo automagically takes care of it
 
 ## Background
 

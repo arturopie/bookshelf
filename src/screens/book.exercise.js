@@ -6,38 +6,20 @@ import debounceFn from 'debounce-fn'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
 import {useParams} from 'react-router-dom'
-import {client} from 'utils/api-client'
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
-import bookPlaceholderSvg from 'assets/book-placeholder.svg'
-import {queryCache, useMutation, useQuery} from 'react-query'
-
-const loadingBook = {
-  title: 'Loading...',
-  author: 'loading...',
-  coverImageUrl: bookPlaceholderSvg,
-  publisher: 'Loading Publishing',
-  synopsis: 'Loading...',
-  loadingBook: true,
-}
+import {useListItem, useUpdateListItem} from '../utils/list-items.exercise'
+import {useBook} from '../utils/books.exercise'
 
 function BookScreen({user}) {
   const {bookId} = useParams()
-  const {data} = useQuery(['book', {bookId}], () =>
-    client(`books/${bookId}`, {token: user.token}),
-  )
-
-  const {data: listItems, isSuccess} = useQuery('list-items', endpoint => {
-    return client(endpoint, {token: user.token}).then(data => data.listItems)
-  })
-
-  const listItem = isSuccess ? listItems.find(i => i.bookId === bookId) : null
-  const book = data?.book ?? loadingBook
+  const {book} = useBook(bookId, user)
   const {title, author, coverImageUrl, publisher, synopsis} = book
+  const {listItem} = useListItem(user, bookId)
 
   return (
     <div>
@@ -119,18 +101,7 @@ function ListItemTimeframe({listItem}) {
 }
 
 function NotesTextarea({listItem, user}) {
-  const invalidateListItemsQuery = {
-    onSettled: () => queryCache.invalidateQueries('list-items'),
-  }
-  const [update] = useMutation(
-    data =>
-      client(`list-items/${listItem.id}`, {
-        token: user.token,
-        method: 'PUT',
-        data,
-      }),
-    invalidateListItemsQuery,
-  )
+  const {update} = useUpdateListItem(user)
   const debouncedMutate = React.useMemo(
     () => debounceFn(update, {wait: 300}),
     [update],

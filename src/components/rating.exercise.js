@@ -2,12 +2,9 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-// 🐨 you'll need useMutation and queryCache from react-query
-// 🐨 you'll also need the client from utils/api-client
 import {FaStar} from 'react-icons/fa'
 import * as colors from 'styles/colors'
-import {queryCache, useMutation} from 'react-query'
-import {client} from '../utils/api-client.exercise'
+import {useUpdateListItem} from '../utils/list-items.exercise'
 
 const visuallyHiddenCSS = {
   border: '0',
@@ -22,19 +19,7 @@ const visuallyHiddenCSS = {
 
 function Rating({listItem, user}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  const invalidateListItemsQuery = {
-    onSettled: () => queryCache.invalidateQueries('list-items'),
-  }
-  const [update] = useMutation(
-    data =>
-      client(`list-items/${listItem.id}`, {
-        token: user.token,
-        method: 'PUT',
-        data,
-      }),
-    invalidateListItemsQuery,
-  )
-
+  const {update} = useUpdateListItem(user)
   React.useEffect(() => {
     function handleKeyDown(event) {
       if (event.key === 'Tab') {

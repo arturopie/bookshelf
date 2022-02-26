@@ -1,12 +1,9 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
-// 🐨 you'll need useQuery from 'react-query'
-// 🐨 and client from 'utils/api-client'
 import {BookListUL} from './lib'
 import {BookRow} from './book-row'
-import {useQuery} from 'react-query'
-import {client} from '../utils/api-client.exercise'
+import {useListItems} from '../utils/list-items.exercise'
 
 function ListItemList({
   user,
@@ -14,9 +11,7 @@ function ListItemList({
   noListItems,
   noFilteredListItems,
 }) {
-  const {data: listItems} = useQuery('list-items', endpoint => {
-    return client(endpoint, {token: user.token}).then(data => data.listItems)
-  })
+  const {data: listItems} = useListItems(user)
 
   const filteredListItems = listItems?.filter(filterListItems)
 

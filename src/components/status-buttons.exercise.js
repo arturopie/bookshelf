@@ -10,13 +10,15 @@ import {
   FaTimesCircle,
 } from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
-// 🐨 you'll need useQuery, useMutation, and queryCache from 'react-query'
-// 🐨 you'll also need client from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
 import * as colors from 'styles/colors'
 import {CircleButton, Spinner} from './lib'
-import {queryCache, useMutation, useQuery} from 'react-query'
-import {client} from '../utils/api-client.exercise'
+import {
+  useCreateListItem,
+  useListItem,
+  useRemoveListItem,
+} from '../utils/list-items.exercise'
+import {useUpdateListItem} from '../utils/list-items.exercise'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -50,38 +52,11 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
 }
 
 function StatusButtons({user, book}) {
-  const {data: listItems, isSuccess} = useQuery('list-items', endpoint => {
-    return client(endpoint, {token: user.token}).then(data => data.listItems)
-  })
+  const {listItem} = useListItem(user, book.id)
 
-  const listItem = isSuccess ? listItems.find(i => i.bookId === book.id) : null
-
-  const invalidateListItemsQuery = {
-    onSettled: () => queryCache.invalidateQueries('list-items'),
-  }
-  const [update] = useMutation(
-    data =>
-      client(`list-items/${listItem.id}`, {
-        token: user.token,
-        method: 'PUT',
-        data,
-      }),
-    invalidateListItemsQuery,
-  )
-
-  const [remove] = useMutation(
-    () =>
-      client(`list-items/${listItem.id}`, {
-        token: user.token,
-        method: 'DELETE',
-      }),
-    invalidateListItemsQuery,
-  )
-
-  const [create] = useMutation(
-    () => client('list-items', {data: {bookId: book.id}, token: user.token}),
-    invalidateListItemsQuery,
-  )
+  const {update} = useUpdateListItem(user)
+  const {remove} = useRemoveListItem(user)
+  const {create} = useCreateListItem(user)
 
   return (
     <React.Fragment>
@@ -106,14 +81,14 @@ function StatusButtons({user, book}) {
         <TooltipButton
           label="Remove from list"
           highlight={colors.danger}
-          onClick={remove}
+          onClick={() => remove(listItem.id)}
           icon={<FaMinusCircle />}
         />
       ) : (
         <TooltipButton
           label="Add to list"
           highlight={colors.indigo}
-          onClick={create}
+          onClick={() => create(book)}
           icon={<FaPlusCircle />}
         />
       )}
