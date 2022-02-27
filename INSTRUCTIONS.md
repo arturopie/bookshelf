@@ -37,6 +37,7 @@ Elaborate on your learnings here in `INSTRUCTIONS.md`
   * Why not returning isSuccess, isLoading, etc?
 * Do we have duplication in ECO when using useQuery? Do you only extract when there is duplication?
   * A benefit of extracting is making sure the keys match, but Apollo automagically takes care of it
+* I couldn't solve the ErrorBoundary credit 
 
 ## Background
 
