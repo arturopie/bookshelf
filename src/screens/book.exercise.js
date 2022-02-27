@@ -9,7 +9,7 @@ import {useParams} from 'react-router-dom'
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import {Textarea} from 'components/lib'
+import {ErrorMessage, Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
 import {useListItem, useUpdateListItem} from '../utils/list-items.exercise'
@@ -101,7 +101,7 @@ function ListItemTimeframe({listItem}) {
 }
 
 function NotesTextarea({listItem, user}) {
-  const {update} = useUpdateListItem(user)
+  const {update, error, isError} = useUpdateListItem(user)
   const debouncedMutate = React.useMemo(
     () => debounceFn(update, {wait: 300}),
     [update],
@@ -126,6 +126,13 @@ function NotesTextarea({listItem, user}) {
         >
           Notes
         </label>
+        {isError ? (
+          <ErrorMessage
+            error={error}
+            variant="inline"
+            css={{marginLeft: 6, fontSize: '0.7em'}}
+          />
+        ) : null}
       </div>
       <Textarea
         id="notes"
