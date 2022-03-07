@@ -1,10 +1,7 @@
-// 🐨 we're going to use React hooks in here now so we'll need React
 import {useQuery, queryCache} from 'react-query'
-// 🐨 get AuthContext from context/auth-context
-import {client} from './api-client'
 import bookPlaceholderSvg from 'assets/book-placeholder.svg'
 import {useCallback} from 'react'
-import {useAuth} from '../context/auth-context.exercise'
+import {useClient} from '../context/auth-context.exercise'
 
 const loadingBook = {
   title: 'Loading...',
@@ -20,14 +17,12 @@ const loadingBooks = Array.from({length: 10}, (v, index) => ({
   ...loadingBook,
 }))
 
-// 🦉 note that this is *not* treated as a hook and is instead called by other hooks
-// So we'll continue to accept the user here.
-const getBookSearchConfig = (query, user) => ({
+const getBookSearchConfig = (query, authenticatedClient) => ({
   queryKey: ['bookSearch', {query}],
   queryFn: () =>
-    client(`books?query=${encodeURIComponent(query)}`, {
-      token: user.token,
-    }).then(data => data.books),
+    authenticatedClient(`books?query=${encodeURIComponent(query)}`).then(
+      data => data.books,
+    ),
   config: {
     onSuccess(books) {
       for (const book of books) {
@@ -38,27 +33,30 @@ const getBookSearchConfig = (query, user) => ({
 })
 
 function useBookSearch(query) {
-  const {user} = useAuth()
-  const result = useQuery(getBookSearchConfig(query, user))
+  const authenticatedClient = useClient()
+
+  const result = useQuery(getBookSearchConfig(query, authenticatedClient))
   return {...result, books: result.data ?? loadingBooks}
 }
 
 function useBook(bookId) {
-  const {user} = useAuth()
+  const authenticatedClient = useClient()
+
   const {data} = useQuery({
     queryKey: ['book', {bookId}],
     queryFn: () =>
-      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
+      authenticatedClient(`books/${bookId}`).then(data => data.book),
   })
   return data ?? loadingBook
 }
 
 function useRefetchBookSearchQuery() {
-  const {user} = useAuth()
+  const authenticatedClient = useClient()
+
   return useCallback(async () => {
     queryCache.removeQueries('bookSearch')
-    await queryCache.prefetchQuery(getBookSearchConfig('', user))
-  }, [user])
+    await queryCache.prefetchQuery(getBookSearchConfig('', authenticatedClient))
+  }, [authenticatedClient])
 }
 
 const bookQueryConfig = {

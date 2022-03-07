@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import * as auth from '../auth-provider'
 import {client} from '../utils/api-client'
 import {useAsync} from '../utils/hooks'
@@ -16,6 +16,16 @@ const useAuth = () => {
     )
   }
   return auth
+}
+
+const useClient = () => {
+  const {
+    user: {token},
+  } = useAuth()
+  return useCallback(
+    (endpoint, opts = {}) => client(endpoint, {token, ...opts}),
+    [token],
+  )
 }
 
 async function getUser() {
@@ -67,4 +77,4 @@ const AuthProvider = ({children}) => {
   }
 }
 
-export {useAuth, AuthProvider}
+export {useAuth, AuthProvider, useClient}
