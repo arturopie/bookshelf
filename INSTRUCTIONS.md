@@ -4,6 +4,8 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* Key Learning: You can useContext indirectly from regular functions (non hooks), by creating a hook with a useCallback that returns the original function. The hook can access the context, so it will be available to the regular function
+
 ## Background
 
 Once we've got all our server cache state inside `react-query`, there's not a
