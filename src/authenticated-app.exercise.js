@@ -11,8 +11,7 @@ import {FinishedScreen} from './screens/finished'
 import {DiscoverBooksScreen} from './screens/discover'
 import {BookScreen} from './screens/book'
 import {NotFoundScreen} from './screens/not-found'
-import {AuthContext} from './context/auth-context.exercise'
-import {useContext} from 'react'
+import {useAuth} from './context/auth-context.exercise'
 
 function ErrorFallback({error}) {
   return (
@@ -30,7 +29,7 @@ function ErrorFallback({error}) {
 }
 
 function AuthenticatedApp() {
-  const {user, logout} = useContext(AuthContext)
+  const {user, logout} = useAuth()
 
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
