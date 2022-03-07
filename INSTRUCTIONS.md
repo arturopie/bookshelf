@@ -5,6 +5,9 @@
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
 * Key Learning: You can useContext indirectly from regular functions (non hooks), by creating a hook with a useCallback that returns the original function. The hook can access the context, so it will be available to the regular function
+* Good practice: Give a context a display name for the devtools. (E.g. AuthContext.displayName = 'AuthContext'
+  )
+* "Collocating all global state for easy testing". I have avoided adding all our providers on test setup, as we are afraid of test slowdown, complexity. How much truth is in this? Is there going to be a slowdown really (and by how much). It looks like AuthProvider could be slow, as it's making requests and auth token stuff, but how is that mocked out?. This is a speed vs production parity tradeoff.
 
 ## Background
 
