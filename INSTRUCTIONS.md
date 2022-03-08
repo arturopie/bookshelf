@@ -8,6 +8,7 @@ Elaborate on your learnings here in `INSTRUCTIONS.md`
   * This could be a sign we could split that single component into Compount Components
 * Usages of useContext:
   * For truly global state in an app, like authenticated user, theme, localization, or some library code like React Router
+* Credit 2 is an example of not going to far: Adding a title component.
 
 ## Background
 
