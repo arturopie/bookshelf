@@ -4,6 +4,11 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* Smell: Are we passing to many props to a single component?
+  * This could be a sign we could split that single component into Compount Components
+* Usages of useContext:
+  * For truly global state in an app, like authenticated user, theme, localization, or some library code like React Router
+
 ## Background
 
 Whenever you find yourself copy/pasting stuff in your codebase, you may have the
