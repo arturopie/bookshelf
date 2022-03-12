@@ -4,6 +4,8 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* ECO Homepage: 55% used, 2.6MB unused
+
 ## Background
 
 One of the most common performance problems web applications face is initial
