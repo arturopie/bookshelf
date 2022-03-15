@@ -4,6 +4,11 @@
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
 
+* What's the best way of prioritizing performance? Specially frontend performance?
+* Now I understand why getUser() was not migrated to use react-query
+* Render as you fetch is so easy to do thanks to the promises API
+* The benefits of Graphql is that we don't need the backend eng to build a boostrap endpoint
+
 ## Background
 
 Something that negatively impacts the performance of our application is what's

@@ -33,6 +33,10 @@ const defaultMutationOptions = {
   onSettled: () => queryCache.invalidateQueries('list-items'),
 }
 
+function setListItems(listItems) {
+  queryCache.setQueryData('list-items', listItems)
+}
+
 function onUpdateMutation(newItem) {
   const previousItems = queryCache.getQueryData('list-items')
 
@@ -42,7 +46,7 @@ function onUpdateMutation(newItem) {
     })
   })
 
-  return () => queryCache.setQueryData('list-items', previousItems)
+  return () => setListItems(previousItems)
 }
 
 function useUpdateListItem(options) {
@@ -95,4 +99,5 @@ export {
   useUpdateListItem,
   useRemoveListItem,
   useCreateListItem,
+  setListItems,
 }
