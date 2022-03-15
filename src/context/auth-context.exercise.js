@@ -6,6 +6,7 @@ import * as auth from 'auth-provider'
 import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
 import {FullPageSpinner, FullPageErrorFallback} from 'components/lib'
+import {useCallback} from 'react'
 
 async function getUser() {
   let user = null
@@ -40,12 +41,18 @@ function AuthProvider(props) {
     run(userPromise)
   }, [run])
 
-  const login = form => auth.login(form).then(user => setData(user))
-  const register = form => auth.register(form).then(user => setData(user))
-  const logout = () => {
+  const login = useCallback(
+    form => auth.login(form).then(user => setData(user)),
+    [setData],
+  )
+  const register = useCallback(
+    form => auth.register(form).then(user => setData(user)),
+    [setData],
+  )
+  const logout = useCallback(() => {
     auth.logout()
     setData(null)
-  }
+  }, [setData])
 
   if (isLoading || isIdle) {
     return <FullPageSpinner />
