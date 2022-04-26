@@ -3,6 +3,10 @@
 ## 📝 Your Notes
 
 Elaborate on your learnings here in `INSTRUCTIONS.md`
+* I like how cypress UI makes the asynchronicity of the test very clear.
+* The tests looks very verbose. Would it benefit from some abstraction?
+* Isn't magic that when element does not exist, this works `cy.findByRole('radio', {name: /5 stars/i}).should('not.exist')`, and this does not `cy.findByRole('radio', {name: /5 stars/i})`
+* I found CY was very flaky (or maybe it wasn't properly running the latest code?)
 
 ## Background
 
